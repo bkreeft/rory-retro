@@ -6,7 +6,7 @@ paths:
   /create-doc:
     post:
       operationId: createGoogleDoc
-      summary: Maak een nieuw Google Document aan
+      summary: Maak een Google Document aan
       requestBody:
         required: true
         content:
@@ -23,7 +23,7 @@ paths:
                 - content
       responses:
         '200':
-          description: Document succesvol aangemaakt
+          description: Succesvol aangemaakt
           content:
             application/json:
               schema:
