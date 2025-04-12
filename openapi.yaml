@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Rory Retro Google Docs Plugin
-  version: 1.0.0
+  version: '1.0.0'
 paths:
   /create-doc:
     post:
