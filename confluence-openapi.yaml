@@ -1,0 +1,136 @@
+openapi: 3.0.1
+info:
+  title: Confluence GPT API
+  description: API waarmee GPT pagina's kan aanmaken, ophalen en bijwerken in Confluence Cloud.
+  version: 1.0.2
+servers:
+  - url: https://ciyd.atlassian.net/wiki/rest/api
+paths:
+  /content:
+    post:
+      summary: Maak een nieuwe pagina aan in Confluence
+      operationId: createPage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPage'
+      responses:
+        '200':
+          description: Pagina aangemaakt
+        '401':
+          description: Unauthorized
+
+  /content/{id}:
+    get:
+      summary: Haal een bestaande pagina op
+      operationId: getPage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: De ID van de Confluence-pagina
+      responses:
+        '200':
+          description: Succesvolle pagina-opvraag
+        '404':
+          description: Pagina niet gevonden
+
+    put:
+      summary: Werk een bestaande pagina bij
+      operationId: updatePage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: De ID van de Confluence-pagina
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedPage'
+      responses:
+        '200':
+          description: Pagina succesvol bijgewerkt
+        '404':
+          description: Pagina niet gevonden
+        '409':
+          description: Versieconflict
+components:
+  schemas:
+    NewPage:
+      type: object
+      required: [type, title, space, body]
+      properties:
+        type:
+          type: string
+          enum: [page]
+          example: page
+        title:
+          type: string
+          example: GPT-demo pagina
+        space:
+          type: object
+          required: [key]
+          properties:
+            key:
+              type: string
+              example: CIYD
+        body:
+          type: object
+          required: [storage]
+          properties:
+            storage:
+              type: object
+              required: [value, representation]
+              properties:
+                value:
+                  type: string
+                  example: <p>Inhoud gegenereerd door GPT.</p>
+                representation:
+                  type: string
+                  enum: [storage]
+                  example: storage
+
+    UpdatedPage:
+      type: object
+      required: [id, type, title, version, body]
+      properties:
+        id:
+          type: string
+          example: 123456
+        type:
+          type: string
+          enum: [page]
+          example: page
+        title:
+          type: string
+          example: GPT-demo pagina (update)
+        version:
+          type: object
+          required: [number]
+          properties:
+            number:
+              type: integer
+              example: 2
+        body:
+          type: object
+          required: [storage]
+          properties:
+            storage:
+              type: object
+              required: [value, representation]
+              properties:
+                value:
+                  type: string
+                  example: <p>Bijgewerkte inhoud door GPT.</p>
+                representation:
+                  type: string
+                  enum: [storage]
+                  example: storage
